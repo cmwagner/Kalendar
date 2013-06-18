@@ -1,51 +1,103 @@
 /**
  * Advances the date into the future by a given number of days.
- * @param {Integer} days The number of days to advance.
- * @returns {Date} The advanced date.
+ * @param {Integer} days    The number of days to advance.
+ * @return {Date}           The advanced date.
  */
 Date.prototype.advDays = function(days) {
-    this.setDate(this.getDate() + days);
-    return this;
+    var that = new Date(this);
+    that.setDate(this.getDate() + days);
+    return that;
 };
 
 
 /**
  * Reverses the date into the past by a given number of days.
- * @param {Integer} days The number of days to reverse.
- * @returns {Date} The reversed date.
+ * @param {Integer} days    The number of days to reverse.
+ * @return {Date}           The reversed date.
  */
 Date.prototype.revDays = function(days) {
-    this.setDate(this.getDate() - days);
-    return this;
+    var that = new Date(this);
+    that.setDate(this.getDate() - days);
+    return that;
+};
+
+
+/**
+ * Advances the date into the future to the given weekday.
+ * @param {String} weekday      The weekday to which the date will advance.
+ * @param {Boolean} absolute    Optional.  Whether to advance the date when it is already the given weekday. (Default = true)
+ * @return {Date}               The advanced date.
+ */
+Date.prototype.advToWeekday = function(weekday, absolute) {
+    var weekdays = {"sunday":0, "monday":1, "tuesday":2, "wednesday":3, "thursday":4, "friday":5, "saturday":6};
+    if(typeof weekday === "string") {
+        weekday = weekdays[weekday.toLowerCase()];
+    }
+    if(typeof absolute === "undefined") {
+        absolute = true;
+    }
+    var that = new Date(this);
+    if(absolute === true) {
+        that = that.advDays(1);
+    }
+    while(that.getDay() !== weekday) {
+        that = that.advDays(1);
+    }
+    return that;
+};
+
+
+/**
+ * Reverses the date into the past to the given weekday.
+ * @param {String} weekday      The weekday to which the date will reverse.
+ * @param {Boolean} absolute    Optional.  Whether to reverse the date when it is already the given weekday. (Default = true)
+ * @return {Date}               The reversed date.
+ */
+Date.prototype.revToWeekday = function(weekday, absolute) {
+    var weekdays = {"sunday":0, "monday":1, "tuesday":2, "wednesday":3, "thursday":4, "friday":5, "saturday":6};
+    if(typeof weekday === "string") {
+        weekday = weekdays[weekday.toLowerCase()];
+    }
+    if(typeof absolute === "undefined") {
+        absolute = true;
+    }
+    var that = new Date(this);
+    if(absolute === true) {
+        that = that.revDays(1);
+    }
+    while(that.getDay() !== weekday) {
+        that = that.revDays(1);
+    }
+    return that;
 };
 
 
 /**
  * Advances the date into the future by a given number of weeks.
- * @param {Integer} weeks The number of weeks to advance.
- * @returns {Date} The advanced date.
+ * @param {Integer} weeks   The number of weeks to advance.
+ * @return {Date}           The advanced date.
  */
 Date.prototype.advWeeks = function(weeks) {
-    this.advDays(7 * weeks);
-    return this;
+    var that = this.advDays(7 * weeks);
+    return that;
 };
 
 
 /**
  * Reverses the date into the past by a given number of weeks.
- * @param {Integer} weeks The number of weeks to reverse.
- * @returns {Date} The reversed date.
+ * @param {Integer} weeks   The number of weeks to reverse.
+ * @return {Date}           The reversed date.
  */
 Date.prototype.revWeeks = function(weeks) {
-    this.revDays(7 * weeks);
-    return this;
+    var that = this.revDays(7 * weeks);
+    return that;
 };
 
 /**
  * Finds the last day of the Gregorian month.
- * @returns {Integer} The number of the last day of the month.
+ * @return {Integer}    The number of the last day of the month.
  */
-Date.prototype.getEOM = function() {
+Date.prototype.advToEOM = function() {
     var day = new Date(this.getFullYear(), this.getMonth() + 1, 0);
     return day.getDate();
 };
