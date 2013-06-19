@@ -162,6 +162,7 @@ Date.prototype.getDateDiff = function(date) {
     return diff;
 };
 
+
 /**
  * Converts this cardinal number into an ordinal number.
  * 
@@ -175,6 +176,17 @@ Number.prototype.toOrdinal = function() {
     var type3 = suffixes[0];
     var suffix = (type1 || type2 || type3);
     return Math.floor(this)+suffix;
+};
+
+/**
+ * Gets the calendar quarter for this date.
+ * 
+ * @return {integer} The number of the quarter.
+ */
+Date.prototype.getQuarter = function() {
+    var month = this.getMonth();
+    var quarter = Math.floor(month/3) +1;
+    return quarter;
 };
 
 
@@ -227,7 +239,43 @@ Date.prototype.getHolidays = function() {
     return holidays;
 };
 
-Date.prototype.isPascalMoon = function() {
+function gYear(year) {
+    this.id = year;
+    var cycle = (year % 19) + 1;
+    var moons = new Array();
+    moons[1] = "April 14, " + year;
+    moons[2] = "April 3, " + year;
+    moons[3] = "March 23, " + year;
+    moons[4] = "April 11, " + year;
+    moons[5] = "March 31, " + year;
+    moons[6] = "April 18, " + year;
+    moons[7] = "April 8, " + year;
+    moons[8] = "March 28, " + year;
+    moons[9] = "April 16, " + year;
+    moons[10] = "April 5, " + year;
+    moons[11] = "March 25, " + year;
+    moons[12] = "April 13, " + year;
+    moons[13] = "April 2, " + year;
+    moons[14] = "March 22, " + year;
+    moons[15] = "April 10, " + year;
+    moons[16] = "March 30, " + year;
+    moons[17] = "April 17, " + year;
+    moons[18] = "April 7, " + year;
+    moons[19] = "March 27, " + year;
+    var moon = new Date(moons[cycle]);
+    this.pascalMoon = moon;
+};
+
+gYear.prototype.getID = function() {
+    return this.id;
+};
+
+gYear.prototype.getPaschalMoon = function() {
+    return this.pascalMoon;
+};
+
+
+Date.prototype.isPaschalMoon = function() {
     var year = this.getFullYear();
     var cycle = (year % 19) + 1;
     var moons = new Array();
@@ -258,7 +306,7 @@ Date.prototype.isPascalMoon = function() {
     }
 };
 
-Date.prototype.getPascalMoon = function() {
+Date.prototype.getPaschalMoon = function() {
     var year = this.getFullYear();
     var cycle = (year % 19) + 1;
     var moons = new Array();
