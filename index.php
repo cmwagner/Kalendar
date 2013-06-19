@@ -6,12 +6,9 @@
     </head>
     <body>
         <script>
-            var br = "<br>\r\n";
-            var today = new Date();
-            var tomorrow = today.advDays(1);
-            var yesterday = today.revDays(1);
-            var nextWeek = today.advWeeks(1);
-            var lastWeek = today.revWeeks(1);
+            var cardinal = 12.5;
+            var ordinal = cardinal.toOrdinal();
+            alert(cardinal + " : " + ordinal);
         </script>
     </body>
 </html>

@@ -1,5 +1,6 @@
 /**
- * Advances the date into the future by a given number of days.
+ * Advances this date into the future by a given number of days.
+ * 
  * @param {Integer} days    The number of days to advance.
  * @return {Date}           The advanced date.
  */
@@ -11,7 +12,8 @@ Date.prototype.advDays = function(days) {
 
 
 /**
- * Reverses the date into the past by a given number of days.
+ * Reverses this date into the past by a given number of days.
+ * 
  * @param {Integer} days    The number of days to reverse.
  * @return {Date}           The reversed date.
  */
@@ -23,7 +25,8 @@ Date.prototype.revDays = function(days) {
 
 
 /**
- * Advances the date into the future to the given weekday.
+ * Advances this date into the future to the given weekday.
+ * 
  * @param {String} weekday      The weekday to which the date will advance.
  * @param {Boolean} absolute    Optional.  Whether to advance the date when it is already the given weekday. (Default = true)
  * @return {Date}               The advanced date.
@@ -48,7 +51,8 @@ Date.prototype.advToWeekday = function(weekday, absolute) {
 
 
 /**
- * Reverses the date into the past to the given weekday.
+ * Reverses this date into the past to the given weekday.
+ * 
  * @param {String} weekday      The weekday to which the date will reverse.
  * @param {Boolean} absolute    Optional.  Whether to reverse the date when it is already the given weekday. (Default = true)
  * @return {Date}               The reversed date.
@@ -73,7 +77,8 @@ Date.prototype.revToWeekday = function(weekday, absolute) {
 
 
 /**
- * Advances the date into the future by a given number of weeks.
+ * Advances this date into the future by a given number of weeks.
+ * 
  * @param {Integer} weeks   The number of weeks to advance.
  * @return {Date}           The advanced date.
  */
@@ -84,7 +89,8 @@ Date.prototype.advWeeks = function(weeks) {
 
 
 /**
- * Reverses the date into the past by a given number of weeks.
+ * Reverses this date into the past by a given number of weeks.
+ * 
  * @param {Integer} weeks   The number of weeks to reverse.
  * @return {Date}           The reversed date.
  */
@@ -94,7 +100,8 @@ Date.prototype.revWeeks = function(weeks) {
 };
 
 /**
- * Finds the last day of the Gregorian month.
+ * Advances this date into the future to the last day of the Gregorian month.
+ * 
  * @return {Integer}    The number of the last day of the month.
  */
 Date.prototype.advToEOM = function() {
@@ -102,12 +109,20 @@ Date.prototype.advToEOM = function() {
     return day.getDate();
 };
 
-Date.prototype.getDateDiff = function(date) {
-    var diff = Math.dateDiff(this, date);
-    return diff;
-};
 
-Math.dateDiff = function(date1, date2) {
+/**
+ * Calculates the difference between two dates in days.
+ * <p>
+ * This method is not sequentially sensitive.  The <code>date1</code> parameter 
+ * can be chronologically before or after the <code>date2</code> parameter.  
+ * The difference calculation includes only one of the two boundaries, which
+ * means the difference between today and tomorrow is one, not two.
+ * 
+ * @param {date} date1      The subject date.
+ * @param {date} date2      The comparison date.
+ * @return {integer}        The calculated difference in days.
+ */
+Math.getDateDiff = function(date1, date2) {
     date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
     date2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
     var distance = 0;
@@ -130,47 +145,39 @@ Math.dateDiff = function(date1, date2) {
     return distance;
 };
 
-Date.prototype.getOrdinal = function() {
-    var date = this.getDate();
-    switch (date) {
-        case 1:
-        case 21:
-        case 31:
-            ordinal = date + "st";
-            break;
-        case 2:
-        case 22:
-            ordinal = date + "nd";
-            break;
-        case 3:
-        case 23:
-            ordinal = date + "rd";
-            break;
-        default:
-            ordinal = date + "th";
-            break;
-    }
-    return ordinal;
+
+/**
+ * Calculates the difference between this date and a comparison date in days.
+ * <p>
+ * This method is not sequentially sensitive.  The <code>date</code> parameter 
+ * can be chronologically before or after this date.  The difference 
+ * calculation includes only one of the two boundaries, which means the 
+ * difference between today and tomorrow is one, not two.
+ * 
+ * @param {date} date       The comparison date.
+ * @return {integer}        The calculated difference in days.
+ */
+Date.prototype.getDateDiff = function(date) {
+    var diff = Math.getDateDiff(this, date);
+    return diff;
 };
 
-Date.prototype.thisSunday = function() {
-    var weekday = this.getDay();
-    return this.addDays(0 - weekday);
+/**
+ * Converts this cardinal number into an ordinal number.
+ * 
+ * @return {string}         The ordinal number.
+ */
+Number.prototype.toOrdinal = function() {
+    var suffixes = new Array("th", "st", "nd", "rd");
+    var modulus = this%100;
+    var type1 = suffixes[(modulus-20)%10];
+    var type2 = suffixes[modulus];
+    var type3 = suffixes[0];
+    var suffix = (type1 || type2 || type3);
+    return Math.floor(this)+suffix;
 };
 
-Date.prototype.nextSunday = function() {
-    var weekday = this.getDay();
-    return this.addDays(7 - weekday);
-};
 
-Date.prototype.prevSunday = function() {
-    var weekday = this.getDay();
-    if (weekday === 0) {
-        return this.addDays(-7);
-    } else {
-        return this.addDays(0 - weekday);
-    }
-};
 
 Date.prototype.getKalendarYear = function() {
     var christmas = new Date("December 25, " + this.getFullYear());
